@@ -4,7 +4,7 @@ const attemptSchema = new mongoose.Schema({
 
   attemptedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",          // your Student model name
+    ref: "user",          
     required: true
   },
 
@@ -47,6 +47,7 @@ const attemptSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
+  
 
 }, { timestamps: true });
 
