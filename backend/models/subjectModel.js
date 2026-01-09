@@ -10,7 +10,8 @@ const subjectSchema = new mongoose.Schema({
     isActive: {
     type: Boolean,
     default: true
-  }
+  },
+  
 }, { timestamps: true });
 
 const Subject =
