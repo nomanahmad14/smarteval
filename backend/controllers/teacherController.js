@@ -1,5 +1,5 @@
 import Teacher from "../models/teacherModel.js";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 // api for teacher login
