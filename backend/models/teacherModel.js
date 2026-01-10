@@ -21,16 +21,15 @@ const teacherSchema = new mongoose.Schema(
 
     image: {
       type: String,
-      default: "", 
+      default: "",
     },
 
-    subjects: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Subject",
-        required: true,
-      },
-    ],
+    subject: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subject",
+      required: true,
+    },
+
 
     experience: {
       type: Number,
