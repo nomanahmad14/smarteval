@@ -134,11 +134,15 @@ const addTeacher = async (req, res) => {
       about,
     });
 
-    res.json({
-      success: true,
-      message: "Teacher created successfully",
-      teacherId: teacher._id,
-    });
+    if (teacher) {
+      res.json({
+        success: true,
+        message: "Teacher created successfully",
+        teacherId: teacher._id,
+      });
+    }
+
+
 
   } catch (error) {
     console.log(error);
@@ -149,5 +153,43 @@ const addTeacher = async (req, res) => {
   }
 };
 
+//add subject 
+const addSubject = async (req, res) => {
+  try {
+    const { name } = req.body;
 
-export { loginAdmin ,addTeacher};
+    if (!name) {
+      return res.status(400).json({
+        success: false,
+        message: "Subject name is required",
+      });
+    }
+
+    const existingSubject = await Subject.findOne({ name });
+    if (existingSubject) {
+      return res.status(409).json({
+        success: false,
+        message: "Subject already exists",
+      });
+    }
+
+    const subject = await Subject.create({ name });
+
+    return res.status(201).json({
+      success: true,
+      message: "Subject created successfully",
+      subjectId: subject._id,
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
+
+export { loginAdmin, addTeacher,addSubject};
