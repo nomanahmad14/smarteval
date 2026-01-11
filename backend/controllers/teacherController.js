@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken'
 const loginTeacher = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const teacher = await Teacher.findOne({ email });
     if (!teacher) {
       return res.status(401).json({ success:false, message:"Invalid credentials" });
