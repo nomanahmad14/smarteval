@@ -17,7 +17,6 @@ app.use(cors());
 
 app.use('/api/admin',adminRouter)
 app.use('/api/user',userRouter)
-app.use('/api/teacher', teacherRouter)
 
 app.get('/',(req,res)=>{
     res.send('API WORKING')
