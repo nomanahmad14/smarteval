@@ -5,7 +5,6 @@ import 'dotenv/config'
 import connectCloudinary from './config/cloudinary.js';
 import adminRouter from './routes/adminRouter.js';
 import userRouter from './routes/userRouter.js';
-import teacherRouter from './routes/teacherRouter.js';
 
 const app=express()
 const port=process.env.PORT || 4000;
