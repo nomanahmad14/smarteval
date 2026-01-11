@@ -4,6 +4,8 @@ import { v2 as cloudinary } from "cloudinary";
 import Teacher from "../models/teacherModel.js";
 import validator from 'validator'
 import Subject from "../models/subjectModel.js";
+import fs from "fs";
+
 
 
 const loginAdmin = async (req, res) => {
@@ -58,13 +60,13 @@ const addTeacher = async (req, res) => {
       about,
     } = req.body;
 
-    // 1️⃣ Required field check
+    //  Required field check
     if (
       !name ||
       !email ||
       !password ||
       !subject ||
-      !experience ||
+      experience === undefined ||
       !address ||
       !city ||
       !about
@@ -109,19 +111,23 @@ const addTeacher = async (req, res) => {
       });
     }
 
-    // 6️⃣ Hash password
+    //  Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 7️⃣ OPTIONAL image upload
+    //  OPTIONAL image upload
     let imageUrl = "";
-    if (req.file) {
-      const imageUpload = await cloudinary.uploader.upload(req.file.path, {
-        resource_type: "image",
-      });
-      imageUrl = imageUpload.secure_url;
+
+    const imageFile = req.files?.find(
+      (file) => file.fieldname === "image"
+    );
+
+    if (imageFile) {
+      const uploadRes = await cloudinary.uploader.upload(imageFile.path);
+      imageUrl = uploadRes.secure_url;
+      fs.unlinkSync(imageFile.path);
     }
 
-    // 8️⃣ Create teacher
+    //  Create teacher
     const teacher = await Teacher.create({
       name,
       email,
@@ -192,4 +198,4 @@ const addSubject = async (req, res) => {
 
 
 
-export { loginAdmin, addTeacher,addSubject};
+export { loginAdmin, addTeacher, addSubject };
