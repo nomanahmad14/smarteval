@@ -5,6 +5,7 @@ import 'dotenv/config'
 import connectCloudinary from './config/cloudinary.js';
 import adminRouter from './routes/adminRouter.js';
 import userRouter from './routes/userRouter.js';
+import teacherRouter from './routes/teacherRouter.js';
 
 const app=express()
 const port=process.env.PORT || 4000;
@@ -17,6 +18,7 @@ app.use(cors());
 
 app.use('/api/admin',adminRouter)
 app.use('/api/user',userRouter)
+app.use('/api/teacher', teacherRouter)
 
 app.get('/',(req,res)=>{
     res.send('API WORKING')
