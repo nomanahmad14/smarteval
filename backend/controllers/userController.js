@@ -3,9 +3,15 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import User from "../models/userModel.js";
+import fs from "fs";
+
 
 const registerUser = async (req, res) => {
   try {
+
+    console.log(req.body);
+    console.log(req.file);
+
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -45,17 +51,17 @@ const registerUser = async (req, res) => {
       (file) => file.fieldname === "image"
     );
 
-    if (imageFile) {
-      const uploadRes = await cloudinary.uploader.upload(imageFile.path);
+    if (req.file) {
+      const uploadRes = await cloudinary.uploader.upload(req.file.path);
       imageUrl = uploadRes.secure_url;
-      fs.unlinkSync(imageFile.path);
+      fs.unlinkSync(req.file.path);
     }
 
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
-      image:imageUrl
+      image: imageUrl
     });
 
     const token = jwt.sign(
