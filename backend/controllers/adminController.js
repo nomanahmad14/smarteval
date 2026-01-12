@@ -5,6 +5,7 @@ import Teacher from "../models/teacherModel.js";
 import validator from 'validator'
 import Subject from "../models/subjectModel.js";
 import fs from "fs";
+import User from "../models/userModel.js";
 
 
 
@@ -196,6 +197,38 @@ const addSubject = async (req, res) => {
   }
 };
 
+const allTeachers=async (req,res)=>{
+  try{
+    const teachers=await Teacher.find({}).select('-password')
+  res.json({success:true,teachers})
+  }
+  catch(error){
+    console.log(error)
+    res.json({success:false,message:error.message})
+  }
 
 
-export { loginAdmin, addTeacher, addSubject };
+}
+
+const adminDashboard=async(req,res)=>{
+  try{
+    const teachers=await Teacher.find({})
+    const users=await User.find({})
+    const subject=await Subject.find({})
+
+    const dashData={
+      teachers:teachers.length,
+      users:users.length,
+      subject:subject.length
+    }
+
+    res.json({success:true,dashData})
+  }catch(error){
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+
+
+
+export { loginAdmin, addTeacher, addSubject,allTeachers,adminDashboard };
