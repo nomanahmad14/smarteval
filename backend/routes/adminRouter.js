@@ -1,5 +1,5 @@
 import express from 'express'
-import { addSubject, addTeacher, loginAdmin } from '../controllers/adminController.js'
+import { addSubject, addTeacher, loginAdmin ,allTeachers, adminDashboard} from '../controllers/adminController.js'
 import authAdmin from '../middlewares/authAdmin.js' 
 import upload from '../middlewares/multer.js'
 
@@ -14,6 +14,8 @@ adminRouter.post(
   authAdmin,
   addTeacher
 );
+adminRouter.post('/getAllTeacher',authAdmin,allTeachers)
+adminRouter.post('/dashData',authAdmin,adminDashboard)
 
 
 
