@@ -8,7 +8,7 @@ import Question from "../models/questionModel.js";
 const loginTeacher = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const teacher = await Teacher.findOne({ email });
+    const teacher = await Teacher.findOne({ email }).select("+password");
     if (!teacher) {
       return res.status(401).json({ success:false, message:"Invalid credentials" });
     }
