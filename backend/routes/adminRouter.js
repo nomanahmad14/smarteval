@@ -14,7 +14,7 @@ adminRouter.post(
   authAdmin,
   addTeacher
 );
-adminRouter.post('/getAllTeacher',authAdmin,allTeachers)
+adminRouter.post('/allTeachers',authAdmin,allTeachers)
 adminRouter.post('/dashData',authAdmin,adminDashboard)
 
 

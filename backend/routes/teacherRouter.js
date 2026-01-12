@@ -1,12 +1,12 @@
 import express from 'express'
-import authAdmin from '../middlewares/authAdmin';
 import { loginTeacher } from '../controllers/teacherController.js';
-import { addTeacher } from '../controllers/adminController.js';
+import authTeacher from '../middlewares/authTeacher.js';
 
 
 const teacherRouter=express.Router();
 
-teacherRouter.post("/addTeacher", authAdmin,addTeacher )
+teacherRouter.post('/loginTeacher',loginTeacher)
+teacherRouter.post('/addQuestion',authTeacher)
 
 export default teacherRouter
 
