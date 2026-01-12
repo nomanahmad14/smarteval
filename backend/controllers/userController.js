@@ -39,10 +39,23 @@ const registerUser = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    let imageUrl = "";
+
+    const imageFile = req.files?.find(
+      (file) => file.fieldname === "image"
+    );
+
+    if (imageFile) {
+      const uploadRes = await cloudinary.uploader.upload(imageFile.path);
+      imageUrl = uploadRes.secure_url;
+      fs.unlinkSync(imageFile.path);
+    }
+
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
+      image:imageUrl
     });
 
     const token = jwt.sign(
