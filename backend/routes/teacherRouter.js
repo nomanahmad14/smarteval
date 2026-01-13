@@ -16,7 +16,7 @@ teacherRouter.get('/questions',authTeacher,getQuestionsBySubject)
 teacherRouter.post('/quiz/:quizId/addQuestions',authTeacher,addQuestionsToQuiz)
 teacherRouter.get('/quiz/:quizId',authTeacher,getQuizById)
 teacherRouter.delete('/quiz/:quizId/removeQuestion/:questionId',authTeacher,removeQuestionFromQuiz)
-teacherRouter.post('/quiz/:quizId:publish',authTeacher,publishQuiz)
+teacherRouter.post('/quiz/:quizId/publish',authTeacher,publishQuiz)
 
 
 export default teacherRouter
