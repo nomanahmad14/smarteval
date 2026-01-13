@@ -99,6 +99,102 @@ const addQuestion = async (req, res) => {
   }
 };
 
+const createQuiz = async (req, res) => {
+  try {
+    const { title, subjectId, duration } = req.body;
+    const teacherId = req.user.id;
+
+    if (!title || !subjectId || !duration) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields",
+      });
+    }
+
+    const quiz = await Quiz.create({
+      title,
+      teacherId,
+      subjectId,
+      duration,
+      questions: [],
+    });
+
+    res.status(201).json({
+      success: true,
+      quizId: quiz._id,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+const getQuestionsBySubject = async (req, res) => {
+  try {
+    const { subjectId } = req.query;
+    const teacherId = req.user.id;
+
+    if (!subjectId) {
+      return res.status(400).json({
+        success: false,
+        message: "Subject ID required",
+      });
+    }
+
+    const questions = await Question.find({
+      subject: subjectId,
+      createdBy: teacherId,
+    });
+
+    res.json({
+      success: true,
+      questions,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+const getQuizById = async (req, res) => {
+  try {
+    const { quizId } = req.params;
+    const teacherId = req.user.id;
+
+    const quiz = await Quiz.findOne({
+      _id: quizId,
+      teacherId,
+    }).populate("questions");
+
+    if (!quiz) {
+      return res.status(404).json({
+        success: false,
+        message: "Quiz not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      quiz,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 const addQuestionToQuiz = async (req, res) => {
 
   try {
@@ -233,7 +329,7 @@ const publishQuiz=async(req,res)=>{
 
 
 export { 
-  loginTeacher, addQuestion ,
+  loginTeacher, addQuestion , createQuiz, getQuestionsBySubject, getQuizById,
   addQuestionToQuiz, removeQuestionFromQuiz,
   publishQuiz
 }
