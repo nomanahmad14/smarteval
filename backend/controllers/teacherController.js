@@ -195,7 +195,7 @@ const getQuizById = async (req, res) => {
   }
 };
 
-const addQuestionToQuiz = async (req, res) => {
+const addQuestionsToQuiz = async (req, res) => {
 
   try {
     const { quizId } = req.params;
@@ -330,6 +330,6 @@ const publishQuiz=async(req,res)=>{
 
 export { 
   loginTeacher, addQuestion , createQuiz, getQuestionsBySubject, getQuizById,
-  addQuestionToQuiz, removeQuestionFromQuiz,
+  addQuestionsToQuiz, removeQuestionFromQuiz,
   publishQuiz
 }
