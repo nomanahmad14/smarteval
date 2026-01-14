@@ -138,4 +138,43 @@ const getSubjectForUser=async (req,res)=>{
   }
 }
 
-export { loginUser, registerUser,getSubjectForUser };
+const getQuizzesBySubjectForUser = async (req, res) => {
+  try {
+    const { subjectId } = req.params;
+    const userId = req.user.id;
+
+    const quizzes = await Quiz.find({
+      subjectId,
+      isPublished: true,
+    });
+
+    const attempts = await Attempt.find({
+      attemptedBy: userId,
+    }).select("quiz");
+
+    const attemptedQuizIds = attempts.map(a => a.quiz.toString());
+
+    const attemptedQuizzes = [];
+    const newQuizzes = [];
+
+    quizzes.forEach(quiz => {
+      if (attemptedQuizIds.includes(quiz._id.toString())) {
+        attemptedQuizzes.push(quiz);
+      } else {
+        newQuizzes.push(quiz);
+      }
+    });
+
+    res.json({
+      success: true,
+      attemptedQuizzes,
+      newQuizzes,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+export { loginUser, registerUser,getSubjectForUser, getQuizzesBySubjectForUser };
+
