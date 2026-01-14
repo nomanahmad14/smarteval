@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import User from "../models/userModel.js";
+import Attempt from "../models/attemptModel.js"
+import Subject from "../models/subjectModel.js"
 import fs from "fs";
 
 
@@ -122,4 +124,18 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { loginUser, registerUser };
+const getSubjectForUser=async (req,res)=>{
+  try{
+    const subjects=await Subject.find({isActive:true})
+
+    res.json({
+      success:true,
+      subjects
+    })
+  }catch(error){
+    console.log(error)
+    res.status(500).json({success:false,message:"server error"})
+  }
+}
+
+export { loginUser, registerUser,getSubjectForUser };
