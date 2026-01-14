@@ -240,7 +240,51 @@ const startQuizAttempt = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 }
+
+ const getAttemptDetails = async (req, res) => {
+  try {
+    const { attemptId } = req.params;
+    const userId = req.user.id;
+
+    const attempt = await Attempt.findOne({
+      _id: attemptId,
+      attemptedBy: userId,
+    }).populate({
+      path: "quiz",
+      populate: {
+        path: "questions",
+        select: "ques options",
+      },
+    });
+
+    if (!attempt) {
+      return res.status(404).json({
+        success: false,
+        message: "Attempt not found",
+      });
+    }
+
+    if (attempt.submittedAt) {
+      return res.status(403).json({
+        success: false,
+        message: "Quiz already submitted",
+      });
+    }
+
+    res.json({
+      success: true,
+      attemptId: attempt._id,
+      duration: attempt.quiz.duration,
+      startedAt: attempt.startedAt,
+      questions: attempt.quiz.questions,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
 export { loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
-  startQuizAttempt
+  startQuizAttempt, getAttemptDetails
  };
 
