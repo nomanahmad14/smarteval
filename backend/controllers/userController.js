@@ -124,17 +124,17 @@ const loginUser = async (req, res) => {
   }
 };
 
-const getSubjectForUser=async (req,res)=>{
-  try{
-    const subjects=await Subject.find({isActive:true})
+const getSubjectForUser = async (req, res) => {
+  try {
+    const subjects = await Subject.find({ isActive: true })
 
     res.json({
-      success:true,
+      success: true,
       subjects
     })
-  }catch(error){
+  } catch (error) {
     console.log(error)
-    res.status(500).json({success:false,message:"server error"})
+    res.status(500).json({ success: false, message: "server error" })
   }
 }
 
@@ -176,5 +176,71 @@ const getQuizzesBySubjectForUser = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
-export { loginUser, registerUser,getSubjectForUser, getQuizzesBySubjectForUser };
+
+const startQuizAttempt = async (req, res) => {
+  try {
+    const { quizId } = req.params
+    const userId = req.user.id;
+
+    const quiz = await Quiz.findOne({
+      _id: quizId,
+      isPublished: true,
+
+    }).populate("questions")
+
+    if (!quiz) {
+      return res.status(404).json({
+        success: false,
+        message: "Quiz not found"
+      })
+    }
+
+    const existingAttempt = await Attempt.findOne({
+      attemptedBy: userId,
+      quiz: quizId
+    })
+
+    if (existingAttempt && existingAttempt.submittedAt) {
+      return res.status(403).json({
+        success: false,
+        message: "Quiz already attempted"
+      });
+    }
+
+    if (!existingAttempt) {
+      const attempt = await Attempt.create({
+        attemptedBy: userId,
+        quiz: quizId
+      })
+
+      return res.json({
+        success: true,
+        attemptId: attempt._id,
+        duration: quiz.duration,
+        questions: quiz.questions.map(q => ({
+          _id: q._id,
+          ques: q.ques,
+          options: q.options
+        }))
+      })
+    }
+
+    res.json({
+      success: true,
+      attemptId: existingAttempt._id,
+      duration: quiz.duration,
+      questions: quiz.questions.map(q => ({
+        _id: q._id,
+        ques: q.ques,
+        options: q.options,
+      })),
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+}
+export { loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
+  startQuizAttempt
+ };
 
