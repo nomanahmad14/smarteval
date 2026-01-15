@@ -242,7 +242,7 @@ const startQuizAttempt = async (req, res) => {
   }
 }
 
- const getAttemptDetails = async (req, res) => {
+const getAttemptDetails = async (req, res) => {
   try {
     const { attemptId } = req.params;
     const userId = req.user.id;
@@ -286,45 +286,57 @@ const startQuizAttempt = async (req, res) => {
   }
 };
 
-const submitQuizAttempt=async (req,res)=>{
-  try{
-    const {attemptId} =req.params;
-    const {answers}=req.body;
-    const {userId}=req.user.id;
+const submitQuizAttempt = async (req, res) => {
+  try {
+    const { attemptId } = req.params;
+    const { answers } = req.body;
+    const { userId } = req.user.id;
 
     const attempt = await Attempt.findOne({
-      _id:attemptId,
-      attemptedBy:userId,
-      submittedAt : {$exists : false},
+      _id: attemptId,
+      attemptedBy: userId,
+      submittedAt: { $exists: false },
     })
 
-    if(!attempt){
+    if (!attempt) {
       return res.status(404).json({
-        success :false,
-        message:"Attempt notfound oralready submiitted"
+        success: false,
+        message: "Attempt notfound oralready submiitted"
       });
     }
 
-    let marks=0;
+    let marks = 0;
 
-    for(let ans of answers){
-      const question =await Question.findById(ans.question)
-      if(question && question.correctAnswer === ans.selectedOption){
+    for (let ans of answers) {
+      const question = await Question.findById(ans.question)
+      if (question && question.correctAnswer === ans.selectedOption) {
         marks++;
       }
     }
 
     res.json({
-      success:true,
-      marksObtained:marks,
+      success: true,
+      marksObtained: marks,
     })
-  }catch(error){
+  } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 }
-export { loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
+
+
+const autoSubmitQuizAttempt = async (req, res) => {
+  try {
+    req.body.isAuto = true;
+    return submitQuizAttempt(req, res);
+  } catch (error) {
+    console.log(error)
+  }
+
+}
+export {
+  loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
   startQuizAttempt, getAttemptDetails,
-  submitQuizAttempt
- };
+  submitQuizAttempt,autoSubmitQuizAttempt
+};
 
