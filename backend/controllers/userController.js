@@ -334,9 +334,62 @@ const autoSubmitQuizAttempt = async (req, res) => {
   }
 
 }
+
+const getAttemptResult = async (req, res) => {
+  try {
+    const { attemptId } = req.params;
+    const userId = req.user.id;
+
+    const attempt = await Attempt.findOne({
+      _id: attemptId,
+      attemptedBy: userId,
+      submittedAt: { $exists: true },
+    }).populate("quiz", "title duration");
+
+    if (!attempt) {
+      return res.status(404).json({
+        success: false,
+        message: "Result not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      quiz: attempt.quiz,
+      marksObtained: attempt.marksObtained,
+      submittedAt: attempt.submittedAt,
+      isAutoSubmitted: attempt.isAutoSubmitted,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+const getMyAttemptedQuizzes = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const attempts = await Attempt.find({
+      attemptedBy: userId,
+      submittedAt: { $exists: true },
+    }).populate("quiz", "title subjectId");
+
+    res.json({
+      success: true,
+      attempts,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 export {
   loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
   startQuizAttempt, getAttemptDetails,
-  submitQuizAttempt,autoSubmitQuizAttempt
+  submitQuizAttempt,autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes
 };
 
