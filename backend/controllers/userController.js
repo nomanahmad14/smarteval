@@ -5,6 +5,7 @@ import { v2 as cloudinary } from "cloudinary";
 import User from "../models/userModel.js";
 import Attempt from "../models/attemptModel.js"
 import Subject from "../models/subjectModel.js"
+import Question from '../models/questionModel.js'
 import fs from "fs";
 
 
@@ -284,7 +285,46 @@ const startQuizAttempt = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+const submitQuizAttempt=async (req,res)=>{
+  try{
+    const {attemptId} =req.params;
+    const {answers}=req.body;
+    const {userId}=req.user.id;
+
+    const attempt = await Attempt.findOne({
+      _id:attemptId,
+      attemptedBy:userId,
+      submittedAt : {$exists : false},
+    })
+
+    if(!attempt){
+      return res.status(404).json({
+        success :false,
+        message:"Attempt notfound oralready submiitted"
+      });
+    }
+
+    let marks=0;
+
+    for(let ans of answers){
+      const question =await Question.findById(ans.question)
+      if(question && question.correctAnswer === ans.selectedOption){
+        marks++;
+      }
+    }
+
+    res.json({
+      success:true,
+      marksObtained:marks,
+    })
+  }catch(error){
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+}
 export { loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
-  startQuizAttempt, getAttemptDetails
+  startQuizAttempt, getAttemptDetails,
+  submitQuizAttempt
  };
 
