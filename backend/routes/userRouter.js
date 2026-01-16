@@ -4,7 +4,6 @@ import {
   startQuizAttempt, getAttemptDetails,
   submitQuizAttempt,autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes
 } from "../controllers/userController.js";
-
 import authUser from "../middlewares/authUser.js";
 import upload from "../middlewares/multer.js";
 

@@ -7,7 +7,7 @@ import Attempt from "../models/attemptModel.js"
 import Subject from "../models/subjectModel.js"
 import Question from '../models/questionModel.js'
 import fs from "fs";
-
+import Quiz from "../models/quizModel.js";
 
 const registerUser = async (req, res) => {
   try {
