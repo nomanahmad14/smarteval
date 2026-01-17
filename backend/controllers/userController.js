@@ -398,9 +398,69 @@ const getMyAttemptedQuizzes = async (req, res) => {
   }
 };
 
+
+import User from "../models/userModel.js";
+import cloudinary from "../config/cloudinary.js";
+import fs from "fs";
+
+const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({
+        success: false,
+        message: "Name is required",
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    let imageUrl = user.image;
+
+    if (req.file) {
+      const uploadRes = await cloudinary.uploader.upload(req.file.path);
+      imageUrl = uploadRes.secure_url;
+      fs.unlinkSync(req.file.path);
+    }
+
+    user.name = name;
+    user.image = imageUrl;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        name: user.name,
+        image: user.image,
+        email: user.email,
+      },
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+export default updateUserProfile;
+
 export {
   loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
   startQuizAttempt, getAttemptDetails,
-  submitQuizAttempt,autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes
+  submitQuizAttempt,autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes,
+  updateUserProfile
 };
 

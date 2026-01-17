@@ -1,8 +1,8 @@
 import express from "express";
 import {
-  loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
-  startQuizAttempt, getAttemptDetails,
-  submitQuizAttempt,autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes
+    loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
+    startQuizAttempt, getAttemptDetails,
+    submitQuizAttempt, autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes
 } from "../controllers/userController.js";
 import authUser from "../middlewares/authUser.js";
 import upload from "../middlewares/multer.js";
@@ -24,5 +24,7 @@ userRouter.post("/attempt/:attemptId/auto-submit", authUser, autoSubmitQuizAttem
 userRouter.get("/attempt/:attemptId/result", authUser, getAttemptResult);
 userRouter.get("/attempts", authUser, getMyAttemptedQuizzes);
 
+userRouter.put( "/profile/update", authUser, upload.single("image"), updateUserProfile);
+
+
 export default userRouter;
-    
