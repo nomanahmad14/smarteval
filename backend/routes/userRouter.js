@@ -2,7 +2,8 @@ import express from "express";
 import {
     loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
     startQuizAttempt, getAttemptDetails,
-    submitQuizAttempt, autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes
+    submitQuizAttempt, autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes,
+    updateUserProfile
 } from "../controllers/userController.js";
 import authUser from "../middlewares/authUser.js";
 import upload from "../middlewares/multer.js";
