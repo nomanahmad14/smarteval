@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import Question from "../models/questionModel.js";
 import Quiz from "../models/quizModel.js";
-import cloudinary from "../config/cloudinary.js";
+import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 // api for teacher login
 
@@ -331,7 +331,7 @@ const publishQuiz=async(req,res)=>{
 
 
 
-const uploadTeacherProfile = async (req, res) => {
+const updateTeacherProfile = async (req, res) => {
   try {
     const teacherId = req.user.id;
     const { name, experience, about } = req.body;
@@ -388,5 +388,5 @@ const uploadTeacherProfile = async (req, res) => {
 export { 
   loginTeacher, addQuestion , createQuiz, getQuestionsBySubject, getQuizById,
   addQuestionsToQuiz, removeQuestionFromQuiz,
-  publishQuiz, uploadTeacherProfile
+  publishQuiz, updateTeacherProfile
 }
