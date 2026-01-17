@@ -3,7 +3,8 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import Question from "../models/questionModel.js";
 import Quiz from "../models/quizModel.js";
-
+import cloudinary from "../config/cloudinary.js";
+import fs from "fs";
 // api for teacher login
 
 const loginTeacher = async (req, res) => {
@@ -328,8 +329,64 @@ const publishQuiz=async(req,res)=>{
 }
 
 
+
+
+const uploadTeacherProfile = async (req, res) => {
+  try {
+    const teacherId = req.user.id;
+    const { name, experience, about } = req.body;
+
+    if (!name || experience === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Name and experience are required",
+      });
+    }
+
+    const teacher = await Teacher.findById(teacherId);
+    if (!teacher) {
+      return res.status(404).json({
+        success: false,
+        message: "Teacher not found",
+      });
+    }
+
+    const updateData = {
+      name,
+      experience: Number(experience),
+      about,
+    };
+
+    if (req.file) {
+      const uploadResult = await cloudinary.uploader.upload(req.file.path);
+      updateData.image = uploadResult.secure_url;
+      fs.unlinkSync(req.file.path); 
+    }
+
+    const updatedTeacher = await Teacher.findByIdAndUpdate(
+      teacherId,
+      updateData,
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Teacher profile updated successfully",
+      teacher: updatedTeacher,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
 export { 
   loginTeacher, addQuestion , createQuiz, getQuestionsBySubject, getQuizById,
   addQuestionsToQuiz, removeQuestionFromQuiz,
-  publishQuiz
+  publishQuiz, uploadTeacherProfile
 }

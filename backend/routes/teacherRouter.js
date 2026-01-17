@@ -3,7 +3,7 @@ import { addQuestion, loginTeacher ,addQuestionsToQuiz, removeQuestionFromQuiz,
   publishQuiz,
   createQuiz,
   getQuestionsBySubject,
-  getQuizById} from '../controllers/teacherController.js';
+  getQuizById, uploadTeacherProfile} from '../controllers/teacherController.js';
 import authTeacher from '../middlewares/authTeacher.js';
 
 
@@ -17,6 +17,7 @@ teacherRouter.post('/quiz/:quizId/addQuestions',authTeacher,addQuestionsToQuiz)
 teacherRouter.get('/quiz/:quizId',authTeacher,getQuizById)
 teacherRouter.delete('/quiz/:quizId/removeQuestion/:questionId',authTeacher,removeQuestionFromQuiz)
 teacherRouter.post('/quiz/:quizId/publish',authTeacher,publishQuiz)
+teacherRouter.put( "/profile/update", authTeacher,upload.single("image"),uploadTeacherProfile);
 
 
 export default teacherRouter
