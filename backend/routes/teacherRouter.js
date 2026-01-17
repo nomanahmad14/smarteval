@@ -5,7 +5,7 @@ import { addQuestion, loginTeacher ,addQuestionsToQuiz, removeQuestionFromQuiz,
   getQuestionsBySubject,
   getQuizById, uploadTeacherProfile} from '../controllers/teacherController.js';
 import authTeacher from '../middlewares/authTeacher.js';
-
+import upload from "../middlewares/multer.js";
 
 const teacherRouter=express.Router();
 
