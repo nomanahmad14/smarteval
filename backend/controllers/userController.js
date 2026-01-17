@@ -399,9 +399,6 @@ const getMyAttemptedQuizzes = async (req, res) => {
 };
 
 
-import User from "../models/userModel.js";
-import cloudinary from "../config/cloudinary.js";
-import fs from "fs";
 
 const updateUserProfile = async (req, res) => {
   try {
