@@ -290,39 +290,50 @@ const submitQuizAttempt = async (req, res) => {
   try {
     const { attemptId } = req.params;
     const { answers } = req.body;
-    const  userId  = req.user.id;
+    const userId = req.user.id;
 
     const attempt = await Attempt.findOne({
       _id: attemptId,
       attemptedBy: userId,
-      submittedAt: { $exists: false },
-    })
+      submittedAt: null
+    });
 
     if (!attempt) {
       return res.status(404).json({
         success: false,
-        message: "Attempt notfound oralready submiitted"
+        message: "Attempt not found or already submitted"
       });
     }
 
     let marks = 0;
 
-    for (let ans of answers) {
-      const question = await Question.findById(ans.question)
+    for (const ans of answers) {
+      const question = await Question.findById(ans.question);
       if (question && question.correctAnswer === ans.selectedOption) {
         marks++;
       }
     }
 
+    attempt.answers = answers;
+    attempt.marksObtained = marks;
+    attempt.submittedAt = new Date();
+
+    await attempt.save();
+
     res.json({
       success: true,
-      marksObtained: marks,
-    })
+      marksObtained: marks
+    });
+
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
-}
+};
+
 
 
 const autoSubmitQuizAttempt = async (req, res) => {
