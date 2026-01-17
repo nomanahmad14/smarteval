@@ -290,7 +290,7 @@ const submitQuizAttempt = async (req, res) => {
   try {
     const { attemptId } = req.params;
     const { answers } = req.body;
-    const { userId } = req.user.id;
+    const  userId  = req.user.id;
 
     const attempt = await Attempt.findOne({
       _id: attemptId,
