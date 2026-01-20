@@ -7,11 +7,9 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [role, setRole] = useState(null); // "admin" | "teacher"
+  const [role, setRole] = useState(null); 
   const [loading, setLoading] = useState(true);
 
-
-  // LOGOUT (used everywhere)
 
   const logout = () => {
     setUser(null);
@@ -20,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.clear();
   };
 
-  // AXIOS INSTANCE (AUTH)
+  
   const authAxios = axios.create({
     baseURL: BACKEND_URL,
   });
@@ -46,8 +44,7 @@ export const AuthProvider = ({ children }) => {
     }
   );
 
-  // LOGIN (ADMIN / TEACHER)
-  
+
   const login = async ({ email, password, role }) => {
     try {
       let url = "";
@@ -68,7 +65,6 @@ export const AuthProvider = ({ children }) => {
 
       setToken(receivedToken);
       setUser(receivedUser);
-      
       setRole(role);
 
       localStorage.setItem("token", receivedToken);
@@ -85,7 +81,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // LOAD FROM LOCAL STORAGE
+  
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
