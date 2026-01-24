@@ -229,6 +229,15 @@ const adminDashboard=async(req,res)=>{
   }
 }
 
+const allSubjects = async (req, res) => {
+  try {
+    const subjects = await Subject.find({});
+    res.json({ success: true, subjects });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
 
 
-export { loginAdmin, addTeacher, addSubject,allTeachers,adminDashboard };
+export { loginAdmin, addTeacher, addSubject,allTeachers,adminDashboard, allSubjects};
