@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 
 import TeacherDashboard from "./pages/Teacher/TeacherDashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminProvider from "./context/AdminContext";
 
 
 const App = () => {
@@ -41,7 +42,9 @@ const App = () => {
           path="/admin"
           element={
             isAuthenticated && role === "admin" ? (
-              <AdminDashboard />
+              <AdminProvider>
+                <AdminDashboard />
+              </AdminProvider>
             ) : (
               <Navigate to="/login" />
             )
