@@ -7,6 +7,10 @@ import Login from "./pages/Login";
 
 import Navbar from "./components/Navbar";
 
+import TeacherDashboard from "./pages/Teacher/TeacherDashboard";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+
+
 const App = () => {
   const { isAuthenticated, role, loading } = useAuth();
 
@@ -15,7 +19,9 @@ const App = () => {
   return (
     <>
       <ToastContainer />
-       {isAuthenticated && <Navbar />}
+
+      {/* Navbar only when logged in */}
+      {isAuthenticated && <Navbar />}
 
       <Routes>
         {/* LOGIN */}
@@ -23,42 +29,38 @@ const App = () => {
           path="/login"
           element={
             isAuthenticated ? (
-              role === "admin" ? (
-                <Navigate to="/admin" />
-              ) : (
-                <Navigate to="/teacher" />
-              )
+              <Navigate to={role === "admin" ? "/admin" : "/teacher"} />
             ) : (
               <Login />
             )
           }
         />
 
-        {/* ADMIN HOME (temporary) */}
+        {/* ADMIN DASHBOARD */}
         <Route
           path="/admin"
           element={
             isAuthenticated && role === "admin" ? (
-              <h1>Admin Dashboard</h1>
+              <AdminDashboard />
             ) : (
               <Navigate to="/login" />
             )
           }
         />
 
-        {/* TEACHER HOME (temporary) */}
+        {/* TEACHER DASHBOARD */}
         <Route
           path="/teacher"
           element={
             isAuthenticated && role === "teacher" ? (
-              <h1>Teacher Dashboard</h1>
+              <TeacherDashboard />
             ) : (
               <Navigate to="/login" />
             )
           }
         />
 
-        {/* DEFAULT */}
+        {/* ROOT */}
         <Route
           path="/"
           element={
@@ -70,6 +72,7 @@ const App = () => {
           }
         />
 
+        {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
