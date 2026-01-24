@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  
   const [role, setRole] = useState("admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,81 +17,69 @@ const Login = () => {
       return;
     }
 
-    const result = await login({
-      email,
-      password,
-      role,
-    });
+    const result = await login({ email, password, role });
 
     if (!result.success) {
       toast.error(result.message);
     } else {
       toast.success("Login successful");
-      
     }
   };
 
   return (
     <form
       onSubmit={onSubmitHandler}
-      className="min-h-[80vh] flex items-center"
+      className="min-h-screen flex items-center justify-center bg-[#f8fafc]"
     >
-      <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] border rounded-xl text-[#5E5E5E] text-sm shadow-lg">
-        <p className="text-2xl font-semibold m-auto">
-          <span className="text-[#5f6FFF] capitalize">
-            {role}
-          </span>{" "}
-          Login
+      <div className="flex flex-col gap-5 w-[420px] p-10 bg-white border rounded-2xl shadow-xl text-[#5E5E5E] text-base">
+        <p className="text-3xl font-semibold text-center">
+          <span className="capitalize text-[#006d5b]">{role}</span> Login
         </p>
 
-        {/* Email */}
         <div className="w-full">
-          <p>Email</p>
+          <p className="mb-1">Email</p>
           <input
             type="email"
-            className="border border-[#DADADA] rounded w-full p-2 mt-1"
+            className="border border-[#DADADA] rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#006d5b]"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
 
-        {/* Password */}
         <div className="w-full">
-          <p>Password</p>
+          <p className="mb-1">Password</p>
           <input
             type="password"
-            className="border border-[#DADADA] rounded w-full p-2 mt-1"
+            className="border border-[#DADADA] rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#006d5b]"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
-          className="bg-[#5f6FFF] text-white w-full py-2 rounded-md text-base"
+          className="bg-[#006d5b] text-white font-semibold w-full py-3 rounded-lg text-lg hover:opacity-90 transition"
         >
           Login
         </button>
 
-        {/* Toggle role */}
         {role === "admin" ? (
-          <p>
+          <p className="text-center">
             Teacher Login?{" "}
             <span
-              className="text-[#5f6FFF] underline cursor-pointer"
+              className="text-[#006d5b] underline cursor-pointer font-medium"
               onClick={() => setRole("teacher")}
             >
               Click here
             </span>
           </p>
         ) : (
-          <p>
+          <p className="text-center">
             Admin Login?{" "}
             <span
-              className="text-[#5f6FFF] underline cursor-pointer"
+              className="text-[#006d5b] underline cursor-pointer font-medium"
               onClick={() => setRole("admin")}
             >
               Click here

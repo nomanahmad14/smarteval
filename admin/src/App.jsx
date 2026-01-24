@@ -5,6 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 
+import Navbar from "./components/Navbar";
+
 const App = () => {
   const { isAuthenticated, role, loading } = useAuth();
 
@@ -13,6 +15,7 @@ const App = () => {
   return (
     <>
       <ToastContainer />
+       {isAuthenticated && <Navbar />}
 
       <Routes>
         {/* LOGIN */}
