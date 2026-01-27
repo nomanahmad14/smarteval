@@ -7,21 +7,24 @@ import Login from "./pages/Login";
 
 import Navbar from "./components/Navbar";
 
-import TeacherDashboard from "./pages/Teacher/TeacherDashboard";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminProvider from "./context/AdminContext";
+import AdminDashboard from "./pages/Admin/AdminDashboard"
+import AddTeacher from "./pages/admin/AddTeacher";
+import AddSubject from "./pages/admin/AddSubject";
+import AllTeachers from "./pages/admin/AllTeachers";
 
+import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 
 const App = () => {
   const { isAuthenticated, role, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="p-6">Loading...</div>;
 
   return (
     <>
       <ToastContainer />
 
-      {/* Navbar only when logged in */}
+      {/* Navbar + Sidebar */}
       {isAuthenticated && <Navbar />}
 
       <Routes>
@@ -37,21 +40,29 @@ const App = () => {
           }
         />
 
-        {/* ADMIN DASHBOARD */}
+        {/* ADMIN ROUTES */}
         <Route
-          path="/admin"
-          element={
-            isAuthenticated && role === "admin" ? (
-              <AdminProvider>
-                <AdminDashboard />
-              </AdminProvider>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
+  path="/admin/*"
+  element={
+    isAuthenticated && role === "admin" ? (
+      <AdminProvider>
+       <div className="pt-16 pl-64">
+          <Routes>
+            <Route index element={<AdminDashboard />} />
+            <Route path="add-teacher" element={<AddTeacher />} />
+            <Route path="add-subject" element={<AddSubject />} />
+            <Route path="all-teachers" element={<AllTeachers />} />
+          </Routes>
+     </div>
+      </AdminProvider>
+    ) : (
+      <Navigate to="/login" />
+    )
+  }
+/>
 
-        {/* TEACHER DASHBOARD */}
+
+        {/* TEACHER ROUTES */}
         <Route
           path="/teacher"
           element={
