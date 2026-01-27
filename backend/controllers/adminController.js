@@ -197,18 +197,24 @@ const addSubject = async (req, res) => {
   }
 };
 
-const allTeachers=async (req,res)=>{
-  try{
-    const teachers=await Teacher.find({}).select('-password')
-  res.json({success:true,teachers})
-  }
-  catch(error){
-    console.log(error)
-    res.json({success:false,message:error.message})
-  }
+const allTeachers = async (req, res) => {
+  try {
+    const teachers = await Teacher.find({})
+      .populate("subject", "name")
+      .select("-password");
 
-
-}
+    res.json({
+      success: true,
+      teachers,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 const adminDashboard=async(req,res)=>{
   try{
