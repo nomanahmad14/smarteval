@@ -1,3 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.input {
+  @apply w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#006d5b]/40;
+}
