@@ -1,11 +1,9 @@
+import React from 'react'
+
 const TeacherDashboard = () => {
   return (
-    <div>
-      <h1 className="text-2xl font-semibold">
-        Teacher Dashboard
-      </h1>
-    </div>
-  );
-};
+    <div>TeacherDashboard</div>
+  )
+}
 
-export default TeacherDashboard;
+export default TeacherDashboard

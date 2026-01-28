@@ -3,7 +3,8 @@ import { addQuestion, loginTeacher ,addQuestionsToQuiz, removeQuestionFromQuiz,
   publishQuiz,
   createQuiz,
   getQuestionsBySubject,
-  getQuizById, updateTeacherProfile} from '../controllers/teacherController.js';
+  getQuizById, updateTeacherProfile,
+  getTeacherProfile} from '../controllers/teacherController.js';
 import authTeacher from '../middlewares/authTeacher.js';
 import upload from "../middlewares/multer.js";
 
@@ -18,6 +19,7 @@ teacherRouter.get('/quiz/:quizId',authTeacher,getQuizById)
 teacherRouter.delete('/quiz/:quizId/removeQuestion/:questionId',authTeacher,removeQuestionFromQuiz)
 teacherRouter.post('/quiz/:quizId/publish',authTeacher,publishQuiz)
 teacherRouter.put( "/profile/update", authTeacher,upload.single("image"),updateTeacherProfile);
+teacherRouter.get('/profile',authTeacher,getTeacherProfile)
 
 
 export default teacherRouter

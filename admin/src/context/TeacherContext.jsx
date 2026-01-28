@@ -10,7 +10,36 @@ const TeacherProvider = ({ children }) => {
   const [questions, setQuestions] = useState([]);
   const [quiz, setQuiz] = useState(null);
 
-  
+  const getTeacherProfile = async () => {
+    try {
+      setLoading(true);
+      const { data } = await authAxios.get("/api/teacher/profile");
+      return data;
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Failed to load profile",
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateTeacherProfile = async (formData) => {
+    try {
+      const { data } = await authAxios.put(
+        "/api/teacher/profile/update",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      return data;
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Error updating profile",
+      };
+    }
+  };
 
   const addQuestion = async (payload) => {
     try {
@@ -33,18 +62,13 @@ const TeacherProvider = ({ children }) => {
       const { data } = await authAxios.get(
         `/api/teacher/questions?subjectId=${subjectId}`
       );
-
       if (data.success) {
         setQuestions(data.questions);
       }
-    } catch (error) {
-      console.error("Fetch questions error:", error);
     } finally {
       setLoading(false);
     }
   };
-
-  
 
   const createQuiz = async (payload) => {
     try {
@@ -67,12 +91,9 @@ const TeacherProvider = ({ children }) => {
       const { data } = await authAxios.get(
         `/api/teacher/quiz/${quizId}`
       );
-
       if (data.success) {
         setQuiz(data.quiz);
       }
-    } catch (error) {
-      console.error("Get quiz error:", error);
     } finally {
       setLoading(false);
     }
@@ -121,51 +142,26 @@ const TeacherProvider = ({ children }) => {
     }
   };
 
-  const updateTeacherProfile = async (formData) => {
-    try {
-      const { data } = await authAxios.put(
-        "/api/teacher/profile/update",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      return data;
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error updating profile",
-      };
-    }
-  };
-
   return (
     <TeacherContext.Provider
       value={{
         loading,
-
-        // questions
         questions,
+        quiz,
+        getTeacherProfile,
+        updateTeacherProfile,
         addQuestion,
         fetchQuestionsBySubject,
-
-        // quiz
-        quiz,
         createQuiz,
         getQuizById,
         addQuestionsToQuiz,
         removeQuestionFromQuiz,
         publishQuiz,
-
-        // profile
-        updateTeacherProfile,
       }}
     >
       {children}
     </TeacherContext.Provider>
   );
-}; 
+};
 
 export default TeacherProvider;

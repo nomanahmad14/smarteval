@@ -383,10 +383,14 @@ const updateTeacherProfile = async (req, res) => {
     });
   }
 };
+const getTeacherProfile = async (req, res) => {
+  const teacher = await Teacher.findById(req.user.id).select("-password");
+  res.json({ success: true, teacher });
+};
 
 
 export { 
   loginTeacher, addQuestion , createQuiz, getQuestionsBySubject, getQuizById,
   addQuestionsToQuiz, removeQuestionFromQuiz,
-  publishQuiz, updateTeacherProfile
+  publishQuiz, updateTeacherProfile,getTeacherProfile
 }

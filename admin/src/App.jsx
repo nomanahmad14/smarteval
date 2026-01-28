@@ -8,6 +8,8 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 
 import AdminProvider from "./context/AdminContext";
+import TeacherProvider from "./context/TeacherContext";
+
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AddTeacher from "./pages/admin/AddTeacher";
 import AddSubject from "./pages/admin/AddSubject";
@@ -63,13 +65,15 @@ const App = () => {
           path="/teacher/*"
           element={
             isAuthenticated && role === "teacher" ? (
-              <div className="pt-16 pl-64">
-                <Routes>
-                  <Route index element={<TeacherDashboard />} />
-                  <Route path="profile" element={<TeacherProfile />} />
-                  <Route path="create-quiz" element={<CreateQuiz />} />
-                </Routes>
-              </div>
+              <TeacherProvider>
+                <div className="pt-16 pl-64">
+                  <Routes>
+                    <Route index element={<TeacherDashboard />} />
+                    <Route path="profile" element={<TeacherProfile />} />
+                    <Route path="create-quiz" element={<CreateQuiz />} />
+                  </Routes>
+                </div>
+              </TeacherProvider>
             ) : (
               <Navigate to="/login" />
             )
