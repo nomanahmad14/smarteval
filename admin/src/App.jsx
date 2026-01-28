@@ -8,12 +8,14 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 
 import AdminProvider from "./context/AdminContext";
-import AdminDashboard from "./pages/Admin/AdminDashboard"
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import AddTeacher from "./pages/admin/AddTeacher";
 import AddSubject from "./pages/admin/AddSubject";
 import AllTeachers from "./pages/admin/AllTeachers";
 
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
+import TeacherProfile from "./pages/teacher/TeacherProfile";
+import CreateQuiz from "./pages/teacher/CreateQuiz";
 
 const App = () => {
   const { isAuthenticated, role, loading } = useAuth();
@@ -23,12 +25,9 @@ const App = () => {
   return (
     <>
       <ToastContainer />
-
-      {/* Navbar + Sidebar */}
       {isAuthenticated && <Navbar />}
 
       <Routes>
-        {/* LOGIN */}
         <Route
           path="/login"
           element={
@@ -40,41 +39,43 @@ const App = () => {
           }
         />
 
-        {/* ADMIN ROUTES */}
         <Route
-  path="/admin/*"
-  element={
-    isAuthenticated && role === "admin" ? (
-      <AdminProvider>
-       <div className="pt-16 pl-64">
-          <Routes>
-            <Route index element={<AdminDashboard />} />
-            <Route path="add-teacher" element={<AddTeacher />} />
-            <Route path="add-subject" element={<AddSubject />} />
-            <Route path="all-teachers" element={<AllTeachers />} />
-          </Routes>
-     </div>
-      </AdminProvider>
-    ) : (
-      <Navigate to="/login" />
-    )
-  }
-/>
-
-
-        {/* TEACHER ROUTES */}
-        <Route
-          path="/teacher"
+          path="/admin/*"
           element={
-            isAuthenticated && role === "teacher" ? (
-              <TeacherDashboard />
+            isAuthenticated && role === "admin" ? (
+              <AdminProvider>
+                <div className="pt-16 pl-64">
+                  <Routes>
+                    <Route index element={<AdminDashboard />} />
+                    <Route path="add-teacher" element={<AddTeacher />} />
+                    <Route path="add-subject" element={<AddSubject />} />
+                    <Route path="all-teachers" element={<AllTeachers />} />
+                  </Routes>
+                </div>
+              </AdminProvider>
             ) : (
               <Navigate to="/login" />
             )
           }
         />
 
-        {/* ROOT */}
+        <Route
+          path="/teacher/*"
+          element={
+            isAuthenticated && role === "teacher" ? (
+              <div className="pt-16 pl-64">
+                <Routes>
+                  <Route index element={<TeacherDashboard />} />
+                  <Route path="profile" element={<TeacherProfile />} />
+                  <Route path="create-quiz" element={<CreateQuiz />} />
+                </Routes>
+              </div>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
         <Route
           path="/"
           element={
@@ -86,7 +87,6 @@ const App = () => {
           }
         />
 
-        {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>

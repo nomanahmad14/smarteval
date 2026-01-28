@@ -3,17 +3,15 @@ import { useAuth } from "../context/AuthContext";
 import Sidebar from "./Sidebar";
 
 const Navbar = () => {
-  const { role, logout } = useAuth();
+  const { role, logout, isAuthenticated } = useAuth();
   const [open, setOpen] = useState(false);
 
-  if (role !== "admin") return null;
+  if (!isAuthenticated) return null;
 
   return (
     <>
-      {/* TOP BAR */}
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 sm:px-10 py-3 border-b bg-white h-16">
         <div className="flex items-center gap-4">
-          {/* Burger */}
           <button
             className="md:hidden text-2xl"
             onClick={() => setOpen(true)}
@@ -25,8 +23,8 @@ const Navbar = () => {
             SmartEval
           </h1>
 
-          <span className="hidden sm:inline px-3 py-1 rounded-full text-sm border border-[#006d5b] text-[#006d5b]">
-            Admin
+          <span className="hidden sm:inline px-3 py-1 rounded-full text-sm border border-[#006d5b] text-[#006d5b] capitalize">
+            {role}
           </span>
         </div>
 
@@ -38,7 +36,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Sidebar */}
       <Sidebar open={open} setOpen={setOpen} />
     </>
   );
