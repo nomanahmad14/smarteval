@@ -166,6 +166,6 @@ const TeacherProvider = ({ children }) => {
       {children}
     </TeacherContext.Provider>
   );
-};
+}; 
 
 export default TeacherProvider;

@@ -1,9 +1,26 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Sidebar = ({ open, setOpen }) => {
+  const { role } = useAuth();
+
+  const adminLinks = [
+    { name: "Dashboard", path: "/admin" },
+    { name: "Add Teacher", path: "/admin/add-teacher" },
+    { name: "Add Subject", path: "/admin/add-subject" },
+    { name: "All Teachers", path: "/admin/all-teachers" },
+  ];
+
+  const teacherLinks = [
+    { name: "Dashboard", path: "/teacher" },
+    { name: "Profile", path: "/teacher/profile" },
+    { name: "Create Quiz", path: "/teacher/create-quiz" },
+  ];
+
+  const links = role === "admin" ? adminLinks : teacherLinks;
+
   return (
     <>
-      {/* Overlay (mobile only) */}
       {open && (
         <div
           className="fixed inset-0 bg-black/40 z-40 md:hidden"
@@ -12,27 +29,20 @@ const Sidebar = ({ open, setOpen }) => {
       )}
 
       <aside
-  className={`
-    bg-white border-r w-64 z-40
-    fixed
-    top-16
-    h-[calc(100vh-4rem)]
-    transition-transform duration-300
-    ${open ? "translate-x-0" : "-translate-x-full"}
-    md:translate-x-0
-  `}
->
+        className={`
+          bg-white border-r w-64 z-40
+          fixed top-16 h-[calc(100vh-4rem)]
+          transition-transform duration-300
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0
+        `}
+      >
         <div className="p-6 space-y-3">
-          <h2 className="text-sm font-semibold text-gray-500">
-            Admin Panel
+          <h2 className="text-sm font-semibold text-gray-500 capitalize">
+            {role} Panel
           </h2>
 
-          {[
-            { name: "Dashboard", path: "/admin" },
-            { name: "Add Teacher", path: "/admin/add-teacher" },
-            { name: "Add Subject", path: "/admin/add-subject" },
-            { name: "All Teachers", path: "/admin/all-teachers" },
-          ].map((item) => (
+          {links.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
