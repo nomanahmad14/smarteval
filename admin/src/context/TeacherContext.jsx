@@ -9,26 +9,8 @@ const TeacherProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [quiz, setQuiz] = useState(null);
-  const [profile, setProfile] = useState(null);
 
   
-
-  const loginTeacher = async (email, password) => {
-    try {
-      const { data } = await authAxios.post(
-        "/api/teacher/loginTeacher",
-        { email, password }
-      );
-      return data;
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Login failed",
-      };
-    }
-  };
-
- 
 
   const addQuestion = async (payload) => {
     try {
@@ -139,8 +121,6 @@ const TeacherProvider = ({ children }) => {
     }
   };
 
- 
-
   const updateTeacherProfile = async (formData) => {
     try {
       const { data } = await authAxios.put(
@@ -166,9 +146,6 @@ const TeacherProvider = ({ children }) => {
       value={{
         loading,
 
-        // auth
-        loginTeacher,
-
         // questions
         questions,
         addQuestion,
@@ -183,7 +160,6 @@ const TeacherProvider = ({ children }) => {
         publishQuiz,
 
         // profile
-        profile,
         updateTeacherProfile,
       }}
     >
