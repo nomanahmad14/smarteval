@@ -142,6 +142,22 @@ const TeacherProvider = ({ children }) => {
     }
   };
 
+  const getTeacherDashboard = async () => {
+  try {
+    setLoading(true);
+    const { data } = await authAxios.get("/api/teacher/dashboard");
+    return data;
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to load dashboard",
+    };
+  } finally {
+    setLoading(false);
+  }
+};
+
+
   return (
     <TeacherContext.Provider
       value={{
@@ -157,6 +173,7 @@ const TeacherProvider = ({ children }) => {
         addQuestionsToQuiz,
         removeQuestionFromQuiz,
         publishQuiz,
+        getTeacherDashboard
       }}
     >
       {children}

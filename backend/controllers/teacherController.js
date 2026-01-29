@@ -388,9 +388,41 @@ const getTeacherProfile = async (req, res) => {
   res.json({ success: true, teacher });
 };
 
+const getTeacherDashboard = async (req, res) => {
+  try {
+    const teacherId = req.user.id;
+
+    const quizzes = await Quiz.find({ teacherId })
+      .select("title isPublished duration totalMarks createdAt")
+      .sort({ createdAt: -1 });
+
+    const totalQuizzes = quizzes.length;
+    const publishedQuizzes = quizzes.filter(q => q.isPublished).length;
+    const unpublishedQuizzes = quizzes.filter(q => !q.isPublished).length;
+
+    res.json({
+      success: true,
+      dashboard: {
+        totalQuizzes,
+        publishedQuizzes,
+        unpublishedQuizzes,
+        quizzes,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
 
 export { 
   loginTeacher, addQuestion , createQuiz, getQuestionsBySubject, getQuizById,
   addQuestionsToQuiz, removeQuestionFromQuiz,
-  publishQuiz, updateTeacherProfile,getTeacherProfile
+  publishQuiz, updateTeacherProfile,getTeacherProfile,
+  getTeacherDashboard
 }
