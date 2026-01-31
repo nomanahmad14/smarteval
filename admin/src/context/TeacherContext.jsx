@@ -16,10 +16,7 @@ const TeacherProvider = ({ children }) => {
       const { data } = await authAxios.get("/api/teacher/profile");
       return data;
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Failed to load profile",
-      };
+      return { success: false, message: "Failed to load profile" };
     } finally {
       setLoading(false);
     }
@@ -34,10 +31,7 @@ const TeacherProvider = ({ children }) => {
       );
       return data;
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error updating profile",
-      };
+      return { success: false, message: "Error updating profile" };
     }
   };
 
@@ -49,19 +43,14 @@ const TeacherProvider = ({ children }) => {
       );
       return data;
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error adding question",
-      };
+      return { success: false, message: "Error adding question" };
     }
   };
 
-  const fetchQuestionsBySubject = async (subjectId) => {
+  const fetchMyQuestions = async () => {
     try {
       setLoading(true);
-      const { data } = await authAxios.get(
-        `/api/teacher/questions?subjectId=${subjectId}`
-      );
+      const { data } = await authAxios.get("/api/teacher/questions");
       if (data.success) {
         setQuestions(data.questions);
       }
@@ -78,10 +67,7 @@ const TeacherProvider = ({ children }) => {
       );
       return data;
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error creating quiz",
-      };
+      return { success: false, message: "Error creating quiz" };
     }
   };
 
@@ -107,10 +93,7 @@ const TeacherProvider = ({ children }) => {
       );
       return data;
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error adding questions",
-      };
+      return { success: false, message: "Error adding questions" };
     }
   };
 
@@ -121,10 +104,7 @@ const TeacherProvider = ({ children }) => {
       );
       return data;
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error removing question",
-      };
+      return { success: false, message: "Error removing question" };
     }
   };
 
@@ -135,28 +115,21 @@ const TeacherProvider = ({ children }) => {
       );
       return data;
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error publishing quiz",
-      };
+      return { success: false, message: "Error publishing quiz" };
     }
   };
 
   const getTeacherDashboard = async () => {
-  try {
-    setLoading(true);
-    const { data } = await authAxios.get("/api/teacher/dashboard");
-    return data;
-  } catch (error) {
-    return {
-      success: false,
-      message: "Failed to load dashboard",
-    };
-  } finally {
-    setLoading(false);
-  }
-};
-
+    try {
+      setLoading(true);
+      const { data } = await authAxios.get("/api/teacher/dashboard");
+      return data;
+    } catch {
+      return { success: false, message: "Failed to load dashboard" };
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <TeacherContext.Provider
@@ -167,13 +140,13 @@ const TeacherProvider = ({ children }) => {
         getTeacherProfile,
         updateTeacherProfile,
         addQuestion,
-        fetchQuestionsBySubject,
+        fetchMyQuestions,
         createQuiz,
         getQuizById,
         addQuestionsToQuiz,
         removeQuestionFromQuiz,
         publishQuiz,
-        getTeacherDashboard
+        getTeacherDashboard,
       }}
     >
       {children}

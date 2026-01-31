@@ -43,12 +43,11 @@ const addQuestion = async (req, res) => {
       difficulty,
       options,
       correctAnswer,
-      subject
     } = req.body;
 
     const teacherId = req.user.id;
 
-    if (!ques || !options || !correctAnswer || !subject) {
+    if (!ques || !options || !correctAnswer) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields",
@@ -58,14 +57,14 @@ const addQuestion = async (req, res) => {
     if (!options?.a || !options?.b || !options?.c || !options?.d) {
       return res.status(400).json({
         success: false,
-        message: "All four options (a, b, c, d) are required",
+        message: "All four options are required",
       });
     }
 
     if (!["a", "b", "c", "d"].includes(correctAnswer)) {
       return res.status(400).json({
         success: false,
-        message: "Correct answer must be one of a, b, c, or d",
+        message: "Correct answer must be a, b, c or d",
       });
     }
 
@@ -76,12 +75,20 @@ const addQuestion = async (req, res) => {
       });
     }
 
+    const teacher = await Teacher.findById(teacherId);
+    if (!teacher) {
+      return res.status(404).json({
+        success: false,
+        message: "Teacher not found",
+      });
+    }
+
     const question = await Question.create({
       ques,
       difficulty,
       options,
       correctAnswer,
-      subject,
+      subject: teacher.subject,
       createdBy: teacherId,
     });
 
@@ -100,22 +107,31 @@ const addQuestion = async (req, res) => {
   }
 };
 
+
 const createQuiz = async (req, res) => {
   try {
-    const { title, subjectId, duration } = req.body;
+    const { title, duration } = req.body;
     const teacherId = req.user.id;
 
-    if (!title || !subjectId || !duration) {
+    if (!title || !duration) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields",
+        message: "Title and duration are required",
+      });
+    }
+
+    const teacher = await Teacher.findById(teacherId);
+    if (!teacher) {
+      return res.status(404).json({
+        success: false,
+        message: "Teacher not found",
       });
     }
 
     const quiz = await Quiz.create({
       title,
       teacherId,
-      subjectId,
+      subjectId: teacher.subject,
       duration,
       questions: [],
     });
@@ -134,20 +150,21 @@ const createQuiz = async (req, res) => {
   }
 };
 
+
 const getQuestionsBySubject = async (req, res) => {
   try {
-    const { subjectId } = req.query;
     const teacherId = req.user.id;
 
-    if (!subjectId) {
-      return res.status(400).json({
+    const teacher = await Teacher.findById(teacherId);
+    if (!teacher) {
+      return res.status(404).json({
         success: false,
-        message: "Subject ID required",
+        message: "Teacher not found",
       });
     }
 
     const questions = await Question.find({
-      subject: subjectId,
+      subject: teacher.subject,
       createdBy: teacherId,
     });
 
@@ -155,7 +172,6 @@ const getQuestionsBySubject = async (req, res) => {
       success: true,
       questions,
     });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -164,6 +180,7 @@ const getQuestionsBySubject = async (req, res) => {
     });
   }
 };
+
 
 const getQuizById = async (req, res) => {
   try {
