@@ -10,19 +10,22 @@ import Profile from "./pages/Profile";
 
 const App = () => {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/my-work" element={<MyWork />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+      {/* MAIN CONTENT */}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/my-work" element={<MyWork />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </main>
 
       <Footer />
-    </>
+    </div>
   );
 };
 

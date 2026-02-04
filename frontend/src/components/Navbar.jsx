@@ -8,21 +8,21 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   const linkClass =
-    "px-3 py-2 hover:text-blue-600 transition font-medium";
+    "px-3 py-2 text-gray-700 hover:text-[#006D5E] font-medium";
 
   return (
-    <nav className="border-b bg-white sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+    <nav className="bg-white border-b sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
-        {/* Logo */}
-        <h1
+        {/* LEFT: Logo */}
+        <div
           onClick={() => navigate("/")}
-          className="text-2xl font-bold cursor-pointer text-blue-600"
+          className="text-2xl font-bold cursor-pointer text-[#006D5E]"
         >
           SmartEval
-        </h1>
+        </div>
 
-        {/* Desktop Menu */}
+        {/* RIGHT: Desktop Menu */}
         <ul className="hidden md:flex items-center gap-6">
           <NavLink to="/" className={linkClass}>Home</NavLink>
           <NavLink to="/about" className={linkClass}>About</NavLink>
@@ -31,7 +31,7 @@ const Navbar = () => {
           {!isLoggedIn ? (
             <button
               onClick={() => navigate("/login")}
-              className="bg-blue-600 text-white px-4 py-2 rounded"
+              className="bg-[#006D5E] text-white px-5 py-2 rounded"
             >
               Login
             </button>
@@ -49,13 +49,13 @@ const Navbar = () => {
               <div className="absolute right-0 mt-2 hidden group-hover:block bg-white border rounded shadow w-40">
                 <p
                   onClick={() => navigate("/profile")}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  className="px-4 py-2 hover:bg-gray-100"
                 >
                   My Profile
                 </p>
                 <p
                   onClick={logout}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500"
+                  className="px-4 py-2 hover:bg-gray-100 text-red-500"
                 >
                   Logout
                 </p>
@@ -67,7 +67,7 @@ const Navbar = () => {
         {/* Mobile Button */}
         <button
           onClick={() => setOpen(!open)}
-          className="md:hidden text-2xl"
+          className="md:hidden text-2xl text-[#006D5E]"
         >
           ☰
         </button>
@@ -87,29 +87,14 @@ const Navbar = () => {
                   setOpen(false);
                   navigate("/login");
                 }}
-                className="bg-blue-600 text-white px-6 py-2 rounded"
+                className="bg-[#006D5E] text-white px-6 py-2 rounded"
               >
                 Login
               </button>
             ) : (
               <>
-                <p
-                  onClick={() => {
-                    setOpen(false);
-                    navigate("/profile");
-                  }}
-                >
-                  My Profile
-                </p>
-                <p
-                  onClick={() => {
-                    logout();
-                    setOpen(false);
-                  }}
-                  className="text-red-500"
-                >
-                  Logout
-                </p>
+                <p onClick={() => navigate("/profile")}>My Profile</p>
+                <p onClick={logout} className="text-red-500">Logout</p>
               </>
             )}
           </ul>
