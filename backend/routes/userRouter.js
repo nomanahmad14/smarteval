@@ -3,7 +3,7 @@ import {
     loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
     startQuizAttempt, getAttemptDetails,
     submitQuizAttempt, autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes,
-    updateUserProfile
+    updateUserProfile,getMyProfile
 } from "../controllers/userController.js";
 import authUser from "../middlewares/authUser.js";
 import upload from "../middlewares/multer.js";
@@ -26,6 +26,7 @@ userRouter.get("/attempt/:attemptId/result", authUser, getAttemptResult);
 userRouter.get("/attempts", authUser, getMyAttemptedQuizzes);
 
 userRouter.put( "/profile/update", authUser, upload.single("image"), updateUserProfile);
+userRouter.get("/profile", authUser, getMyProfile);
 
 
 export default userRouter;

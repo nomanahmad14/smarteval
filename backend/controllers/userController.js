@@ -397,6 +397,33 @@ const getMyAttemptedQuizzes = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+const getMyProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).select(
+      "name email image createdAt"
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
 
 
 
@@ -452,12 +479,12 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-export default updateUserProfile;
+
 
 export {
   loginUser, registerUser, getSubjectForUser, getQuizzesBySubjectForUser,
   startQuizAttempt, getAttemptDetails,
   submitQuizAttempt,autoSubmitQuizAttempt, getAttemptResult, getMyAttemptedQuizzes,
-  updateUserProfile
+  updateUserProfile,getMyProfile
 };
 
