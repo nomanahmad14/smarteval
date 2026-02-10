@@ -13,7 +13,7 @@ const AppContextProvider = ({ children }) => {
   const isLoggedIn = Boolean(token);
 
   // axios config
-  axios.defaults.baseURL = "http://localhost:5000/api";
+  axios.defaults.baseURL = "http://localhost:4000/api";
 
   // fetch logged-in user
   const fetchUserProfile = async () => {
