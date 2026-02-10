@@ -7,13 +7,13 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import MyWork from "./pages/MyWork";
 import Profile from "./pages/Profile";
+import SubjectQuizzes from "./pages/SubjectQuizzes";
 
 const App = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      {/* MAIN CONTENT */}
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -21,6 +21,10 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/my-work" element={<MyWork />} />
           <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/subject/:subjectId"
+            element={<SubjectQuizzes />}
+          />
         </Routes>
       </main>
 

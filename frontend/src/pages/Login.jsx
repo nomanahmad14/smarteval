@@ -1,10 +1,9 @@
 import { useContext, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AppContext";
 
 const Login = () => {
-  const { setToken } = useContext(AuthContext);
+  const { login, register } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState(true);
@@ -21,25 +20,11 @@ const Login = () => {
 
     try {
       if (isLogin) {
-        // LOGIN
-        const { data } = await axios.post("/user/login", {
-          email,
-          password,
-        });
-
-        setToken(data.token);
-        navigate("/");
+        await login(email, password);
       } else {
-        // REGISTER (NO IMAGE)
-        const { data } = await axios.post("/user/register", {
-          name,
-          email,
-          password,
-        });
-
-        setToken(data.token);
-        navigate("/");
+        await register(name, email, password);
       }
+      navigate("/");
     } catch (err) {
       setError(
         err.response?.data?.message || "Something went wrong"
@@ -51,7 +36,7 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center min-h-[70vh] px-4">
-      <div className="w-full max-w-md border rounded-lg p-6 shadow-sm">
+      <div className="w-full max-w-md border rounded-lg p-6 shadow-sm bg-white">
 
         <h2 className="text-2xl font-bold text-center text-[#006D5E] mb-4">
           {isLogin ? "Login to SmartEval" : "Create your SmartEval account"}
@@ -111,7 +96,6 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Toggle text */}
         <p className="text-sm text-center mt-4">
           {isLogin ? (
             <>
